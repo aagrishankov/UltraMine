@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile gradleApi()
+	compile 'org.ow2.asm:asm-debug-all:5.0.3'
+	compile 'commons-io:commons-io:2.4'
+	compile 'net.md-5:SpecialSource:1.7.3'
+}

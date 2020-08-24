@@ -1,0 +1,214 @@
+#Server core
+ultramine.teleporter.fail.cooldownd=You will be able to teleport in %s seconds
+ultramine.teleporter.fail.dim=Failed to teleport: the world is not exists or was held
+ultramine.teleporter.fail.riding=You can not teleport while riding
+ultramine.teleporter.delay=You will be teleported in %s seconds
+ultramine.teleporter.canceled=Teleportation canceled
+
+ultramine.autobroadcast.debugmsg=Server load: %s (Peak: %s), TPS: %s/20, Players: %s
+ultramine.autobackup.start=Autobackup started
+
+ultramine.tools.itemblocker.useitem=Use of this item is forbidden by server
+ultramine.tools.itemblocker.useblock=Use of this block is forbidden by server
+ultramine.tools.itemblocker.rmitem=This item is forbidden by server
+
+ultramine.notify.loggedhidden=Joined the server in invisibility
+ultramine.hidden.chat=You can't write to chat in invisibility
+
+ultramine.time.day.1=day
+ultramine.time.day.2=days
+ultramine.time.day.3=days
+ultramine.time.hour.1=hour
+ultramine.time.hour.2=hours
+ultramine.time.hour.3=hours
+ultramine.time.min.1=minute
+ultramine.time.min.1.gen=minute
+ultramine.time.min.2=minutes
+ultramine.time.min.3=minutes
+ultramine.time.sec.1=second
+ultramine.time.sec.1.gen=second
+ultramine.time.sec.2=seconds
+ultramine.time.sec.3=seconds
+
+ultramine.restart.after=The server will restart in %s
+ultramine.restart.now1=The server is restarting now!
+ultramine.restart.now2=You will be automatically disconnected from server
+ultramine.restart.kick1=The server has been restarted
+ultramine.restart.kick2=You will be able to login in few minutes
+
+#Command generic
+command.generic.world.invalid=Can't find world '%s'
+command.generic.itemstack.data=Failed to parse item data: %s
+command.generic.itemstack.size=Failed to parse stack size: %s
+
+#Economy generic
+ultramine.economy.fail.currency_not_exists=Specified currency is not exists: %s
+ultramine.economy.fail.currency_not_supported=Specified currency (%2$s) is not supported by account: %1$s
+ultramine.economy.fail.account_type_not_supported=The type of the specified account is not supported for currency: %1$s
+ultramine.economy.fail.negative_amount=Amount must be greater than zero (specified %s)
+ultramine.economy.fail.insufficient_funds=Your account is not enough money to carry out this operation
+
+#Vanilla replacements
+command.tp.usage=/tp [target player] <destination player> OR /tp [target player] [world] <x> <y> <z>
+command.tp.description=Teleports target player (or you) to another player or coordinate
+command.tp.success.player=Teleported <%s> to <%s>
+command.tp.success.coordinate=Teleported <%s> to <%s, %s, %s, %s>
+
+command.tphere.usage=/tphere [target player]
+command.tphere.description=Teleports target player to you
+
+command.difficulty.usage=/difficulty [world] <peaceful easy normal hard>
+command.difficulty.description=Changes difficulty setting of selected world
+command.difficulty.success=Difficulty of world %s changed from %s to %s
+
+command.msg.usage=/msg <player> <message ...>
+command.msg.description=Send private message to player
+command.msg.display.outgoing=[me -> %s] %s
+command.msg.display.incoming=[%s -> me] %s
+
+command.reply.usage=/reply <message ...>
+command.reply.description=Send private message to the last player which you sent message with /msg
+command.reply.fail=Use /msg command first
+
+command.weather.usage=/weather [world] <clear rain thunder> [nextchange]
+command.weather.description=Sets weather in current or specified world
+
+command.time.usage=/time [world] [add|set] <day|night|time>
+command.time.description=Sets time in current or specified world
+
+command.say.server=Server
+
+#Basic commands
+
+command.fastwarp.usage=/fastwarp <app|remove> <name>
+command.fastwarp.description=Add fastwarp
+command.fastwarp.fail.spawn=Can't change spawn fastwarp
+command.fastwarp.fail.nowarp=Warp with specified name not set; Use /setwarp
+command.fastwarp.fail.nofastwarp=Fastwarp with specified name not set
+command.fastwarp.fail.already=Fastwarp with specified name already set
+command.fastwarp.success.add=Fastwarp added
+command.fastwarp.success.remove=Fastwarp removed
+command.fastwarp.use.description=Teleport to this point
+
+#Technical commands
+command.id.usage=/id <id>
+command.id.description=Displays information about specified item id
+
+command.uptime.usage=/uptime
+command.uptime.description=Displays server's up time and load information
+command.uptime.msg.up=UP: %s
+command.uptime.msg.load=Load average: %s (Peak: %s)
+command.uptime.msg.tps=Ticks per second: %s/20 (%s)
+
+command.debuginfo.usage=/debuginfo [world/player]
+command.debuginfo.description=Some debug information
+
+command.memstat.usage=/memstat
+command.memstat.description=Displays max, current allocated and free memory
+
+command.multiworld.usage=/multiworld <load|unload|hold|destroy|delete|wipe|unregister|drop|goto> <world> or /multiworld list or /multiworld import <file> [path]
+command.multiworld.description=All multiworld commands
+command.multiworld.list.head=Dimension list:
+command.multiworld.alreadyloaded=Dimension is already loaded
+command.multiworld.notregistered=Dimension is not registered (not exists)
+command.multiworld.notloaded=Dimension is not loaded
+command.multiworld.load.start=Starting dimension loading
+command.multiworld.load.success=Dimension successfuly loaded
+command.multiworld.load.fail=Failed to load dimension
+command.multiworld.unload.start=Starting dimension unloading
+command.multiworld.unload.success=Dimension successfuly unloaded
+command.multiworld.unload.fail=Failed to unload dimension
+command.multiworld.hold.start=Starting dimension holding
+command.multiworld.hold.success=Dimension successfuly held
+command.multiworld.hold.fail=Failed to hold dimension
+command.multiworld.destroy.start=Starting dimension destroying
+command.multiworld.destroy.success=Dimension successfuly destroyed
+command.multiworld.destroy.fail=Failed to destroy dimension
+command.multiworld.delete.start=Starting dimension deleting
+command.multiworld.delete.success=Dimension successfuly deleted
+command.multiworld.delete.fail=Failed to delete dimension
+command.multiworld.wipe.start=Starting dimension wiping
+command.multiworld.wipe.success=Dimension successfuly wiped
+command.multiworld.wipe.fail=Failed to wipe dimension
+command.multiworld.unregister.success=Dimension successfuly unregistered
+command.multiworld.drop.success=Dimension successfuly dropped
+
+command.countentity.usage=/countentity <radius>
+command.countentity.description=Specifies the number of Entity radially
+command.countentity.result1=Found %s Entity. Mobs: %s, items: %s
+command.countentity.result2=Monsters: %s, Animals: %s, Water: %s, Ambient: %s
+
+command.clearentity.usage=/clearentity [all|mobs|items] <radius>
+command.clearentity.description=Removes Entities radially
+command.clearentity.success=Cleared %s Entity. Mobs: %s, Items: %s
+
+command.startlags.usage=/startlags percents OR /startlags stop
+command.startlags.description=Simulruet server overload on a specified percentage
+command.startlags.start=Start lagging on %s%%
+command.startlags.stop=Stop lagging
+
+command.restart.usage=/restart <delay> OR /restart abort
+command.restart.description=Delayed server restart
+command.restart.abort.success=Restart aborted
+command.restart.abort.fail=Restart has not started yet
+command.restart.success=Restart started
+
+command.javagc.usage=/javaGC
+command.javagc.description=Perform system garbage collector
+command.javagc.success=System GC performed
+
+command.chunkgc.usage=/chunkgc
+command.chunkgc.description=Unloads all unused chunks
+command.chunkgc.success=Chunk GC performed
+
+command.genworld.usage=/genworld OR /genworld <radius> OR /genworld <world> <x> <z> <radius> OR /genworld [world] stop
+command.genworld.description=Generates area radially or inside world border
+command.genworld.already=Generation of specified world is already started. Type "/genworld stop" before
+command.genworld.noborder=The world don't contains any borders; add border or use radially generation
+command.genworld.start=World generation started
+command.genworld.stop=World generation stopped (generated %s/%s chunks)
+command.genworld.stop.fail.notrun=Generation of specified world has not yet been started
+command.genworld.complete=World generation completed (generated %s/%s chunks)
+command.genworld.process=World generation: generated %s/%s chunks
+
+command.chunkdebug.usage=/chunkdebug <start|stop> OR /chunkdebug <TOP> [average|peak] [count]
+command.chunkdebug.description=Starts per chunk profiling or displays results
+command.chunkdebug.start=Chunk profiling started
+command.chunkdebug.stop=Chunk profiling stopped
+command.chunkdebug.notstart=Chunk profiling has not started yet. Wait for statistics collection
+command.chunkdebug.top.head=Chunk top:
+
+command.backup.usage=/backup make [worlds...] OR /backup list OR /backup apply <number/path> [flags: -noplayers -temp -restart -worlds ...]
+command.backup.description=Makes on applies backup fo all or specified worlds
+command.backup.make.started=Backup started for worlds: %s
+command.backup.make.fail=Nothing to backup
+command.backup.list.head=Backup list
+command.backup.apply.started=Started backup applying for world: %s
+command.backup.apply.fail.none=backup with id %s not found
+command.backup.apply.fail.nofile=Backup file not found for path: %s
+command.backup.apply.fail.zip.read=Failed to read zip file: %s
+command.backup.apply.fail.nothing=Nothing to apply
+command.backup.apply.fail.rmdir=Failed to remove directory of world: %s
+command.backup.apply.fail.zip.unpack=Failed to unpack zip file. It is very VERY bad. May lead to the complete breaking of the world. Please, apply other backup.
+command.backup.apply.success.temp=Backup successfuly applied! Created temp worlds:
+command.backup.apply.success=Backup successfuly applied!
+
+command.recipecache.usage=/recipecache clear
+command.recipecache.description=Clears crafting recipe cache
+command.recipecache.clear.success=Crafting recipe cache successfully cleared
+
+command.reloadcfg.usage=/reloadcfg
+command.reloadcfg.description=Reloads UltraMine server configuration (in /settings directory)
+command.reloadcfg.success=Server configuration successfully reloaded
+
+command.entitylist.usage=/entitylist [world]
+command.entitylist.description=Displays list of all loaded entities in specified or all worlds
+
+command.killentity.usage=/killentity <id>
+command.killentity.description=Kills entity with specified ID
+
+ultramine.ability.chat.muted=You has been muted. You will be unmuted in %s
+ultramine.ability.chat.muted.forever=You has been muted forever
+
+ultramine.ability.command.muted=You don't have ability to execute commands. You will be unmuted in %s
+ultramine.ability.command.muted.forever=You has been muted forever. You don't have ability to execute commands

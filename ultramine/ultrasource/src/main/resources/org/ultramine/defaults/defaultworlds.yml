@@ -1,0 +1,127 @@
+global: &global
+    dimension: 0
+    generation: &global_gen
+        providerID: 0
+        levelType: DEFAULT
+        seed: {seed}
+        generateStructures: true
+        generatorSettings: ''
+        disableModGeneration: false
+        modGenerationBlackList: []
+    mobSpawn:
+        allowAnimals: true
+        spawnAnimals: true
+        spawnMonsters: true
+        allowNPCs: true
+        spawnEngine: NEW
+        newEngineSettings:
+            monsters:
+                enabled: true
+                minRadius: 2
+                maxRadius: 2
+                minPlayerDistance: 0
+                performInterval: 20
+                localCheckRadius: 1
+                localLimit: 3
+                nightlyLocalLimit: 5
+            animals:
+                enabled: true
+                minRadius: 5
+                maxRadius: 6
+                minPlayerDistance: 0
+                performInterval: 401
+                localCheckRadius: 5
+                localLimit: 3
+            water:
+                enabled: true
+                minRadius: 3
+                maxRadius: 5
+                minPlayerDistance: 0
+                performInterval: 400
+                localCheckRadius: 4
+                localLimit: 3
+            ambient:
+                enabled: true
+                minPlayerDistance: 8
+                performInterval: 1203
+                localCheckRadius: 4
+                localLimit: 10
+    settings:
+        difficulty: 1
+        maxBuildHeight: 256
+        pvp: true
+        time: NORMAL
+        weather: NORMAL
+        useIsolatedPlayerData: false
+        respawnOnWarp: null
+        reconnectOnWarp: null
+        fastLeafDecay: false
+    borders: []
+    chunkLoading: &global_cl
+        viewDistance: 15
+        chunkActivateRadius: 7
+        chunkCacheSize: 1024
+        enableChunkLoaders: true
+        maxSendRate: 4
+    loadBalancer:
+        limits:
+            monsters:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 16
+                higherLimit: 16
+            animals:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 4
+                higherLimit: 32
+            water:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 4
+                higherLimit: 16
+            ambient:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 16
+                higherLimit: 16
+            items:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 16
+                higherLimit: 1024
+            xpOrbs:
+                updateRadius: 7
+                updateByChunkLoader: true
+                lowerLimit: 8
+                higherLimit: 16
+
+worlds:
+    -   <<: *global
+        dimension: 0
+        name: 'world'
+        generation:
+            <<: *global_gen
+            providerID: 0
+        chunkLoading:
+            <<: *global_cl
+            chunkCacheSize: 4096
+        portals:
+            netherLink: -1
+            enderLink: 1
+    -   <<: *global
+        dimension: -1
+        name: 'world_nether'
+        generation:
+            <<: *global_gen
+            providerID: -1
+        portals:
+            netherLink: 0
+    -   <<: *global
+        dimension: 1
+        name: 'world_the_end'
+        generation:
+            <<: *global_gen
+            providerID: 1
+        portals:
+            enderLink: 1 #Vanilla logic, ender link is the same as current ender dimension

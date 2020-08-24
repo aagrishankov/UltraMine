@@ -1,0 +1,334 @@
+//import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact
+//import org.gradle.api.internal.file.copy.CopyAction
+//import org.gradle.api.internal.java.JavaLibrary
+import org.ultramine.gradle.task.ReobfTask
+import org.ultramine.gradle.task.SideSplitTask
+import org.ultramine.gradle.task.SpeicialClassTransformTask
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava.options.encoding = 'UTF-8'
+if(compile_incremental == "true")
+	compileJava.options.incremental = true
+
+ext.commit = null
+ext.previousCommit = null
+ext.versionFile = null
+ext.revision = 0
+group = project_group
+version = (concat_mc_version_to=='version' ? (minecraft_version+'-') : '') + computeVersion()
+
+repositories {
+	maven {
+		name 'forge'
+		url 'http://files.minecraftforge.net/maven'
+	}
+	mavenCentral()
+	maven {
+		name 'sonatypeSnapshot'
+		url 'https://oss.sonatype.org/content/repositories/snapshots/'
+	}
+	maven {
+		name 'minecraft'
+		url 'https://libraries.minecraft.net/'
+	}
+}
+
+configurations {
+	compileCommon
+	compileClient
+	compileServer
+	runtimeCommon
+	runtimeClient
+	runtimeServer
+	compile.extendsFrom compileCommon, compileClient, compileServer
+	packageClient.extendsFrom compileCommon, compileClient, runtimeCommon, runtimeClient
+	packageServer.extendsFrom compileCommon, compileServer, runtimeCommon, runtimeServer
+	packageAll.extendsFrom compileCommon, compileClient, compileServer, runtimeCommon, runtimeClient, runtimeServer
+	runtime.setExtendsFrom([packageAll])
+	//packageClient, packageServer & packageAll is not linking to IDE and must not be used for adding dependencies
+}
+
+dependencies {
+	compileCommon 'net.minecraft:launchwrapper:1.11'
+	compileCommon 'com.google.code.findbugs:jsr305:1.3.9'
+	compileCommon 'org.ow2.asm:asm-debug-all:5.0.3'
+	compileCommon 'com.typesafe.akka:akka-actor_2.11:2.3.3'
+	compileCommon 'com.typesafe:config:1.2.1'
+	compileCommon 'org.scala-lang:scala-actors-migration_2.11:1.1.0'
+	compileCommon 'org.scala-lang:scala-compiler:2.11.1'
+	compileCommon 'org.scala-lang.plugins:scala-continuations-library_2.11:1.0.2'
+	compileCommon 'org.scala-lang.plugins:scala-continuations-plugin_2.11.1:1.0.2'
+	compileCommon 'org.scala-lang:scala-library:2.11.1'
+	compileCommon 'org.scala-lang:scala-parser-combinators:2.11.0-M4'
+	compileCommon 'org.scala-lang:scala-reflect:2.11.1'
+	compileCommon 'org.scala-lang:scala-swing:2.11.0-M4'
+	compileCommon 'org.scala-lang:scala-xml:2.11.0-M4'
+	compileCommon 'net.sf.jopt-simple:jopt-simple:4.5'
+	compileCommon 'lzma:lzma:0.0.1'
+	compileClient 'com.mojang:realms:1.3.5'
+	compileCommon 'org.apache.commons:commons-compress:1.8.1'
+	compileCommon 'org.apache.httpcomponents:httpclient:4.3.3'
+	compileCommon 'commons-logging:commons-logging:1.1.3'
+	compileCommon 'org.apache.httpcomponents:httpcore:4.3.2'
+	compileCommon 'java3d:vecmath:1.3.1'
+	compileCommon 'net.sf.trove4j:trove4j:3.0.3'
+	compileCommon 'com.ibm.icu:icu4j-core-mojang:51.2'
+	compileClient 'com.paulscode:codecjorbis:20101023'
+	compileClient 'com.paulscode:codecwav:20101023'
+	compileClient 'com.paulscode:libraryjavasound:20101123'
+	compileClient 'com.paulscode:librarylwjglopenal:20100824'
+	compileClient 'com.paulscode:soundsystem:20120107'
+	compileCommon 'io.netty:netty-all:4.0.10.Final'
+	compileCommon 'com.google.guava:guava:17.0'
+	compileCommon 'org.apache.commons:commons-lang3:3.3.2'
+	compileCommon 'commons-io:commons-io:2.4'
+	compileCommon 'commons-codec:commons-codec:1.9'
+	compileClient 'net.java.jinput:jinput:2.0.5'
+	compileClient 'net.java.jutils:jutils:1.0.0'
+	compileCommon 'com.google.code.gson:gson:2.2.4'
+	compileCommon 'com.mojang:authlib:1.5.16'
+	compileCommon 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+	compileCommon 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+	compileClient 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+	compileClient 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+	compileClient 'tv.twitch:twitch:5.16'
+
+	compileCommon 'org.yaml:snakeyaml:1.16'
+	compileCommon 'com.lmax:disruptor:3.2.1'
+	compileCommon 'org.apache.commons:commons-dbcp2:2.1.1'
+	compileCommon 'net.openhft:koloboke-api-jdk8:0.6.8'
+	compileServer 'jline:jline:2.13', {transitive = false}
+
+	runtimeCommon 'net.openhft:koloboke-impl-jdk8:0.6.8'
+	runtimeServer 'mysql:mysql-connector-java:5.1.31'
+
+	testCompile "org.spockframework:spock-core:1.1-groovy-2.4-rc-1"
+}
+
+task injectVersion(type: SpeicialClassTransformTask) {
+	dependsOn tasks.compileJava
+	inputDir = tasks.compileJava.destinationDir
+	replace {
+		replaceIn 'org.ultramine.server.UltramineServerModContainer'
+		replace '@version@', version
+	}
+}
+
+task reobf(type: ReobfTask) {
+	dependsOn tasks.compileJava, tasks.injectVersion
+	classpath = sourceSets.main.compileClasspath;
+	srg = 'conf/mcp2notch.srg'
+	inputDir = tasks.compileJava.destinationDir
+	overrideInputDir = tasks.injectVersion.outputDir
+}
+
+task sidesplit(type: SideSplitTask) {
+	dependsOn tasks.reobf
+	inputDir = tasks.reobf.outputDir
+}
+
+task processServerResources(type: ProcessResources) {
+	from sourceSets.main.resources.srcDirs
+	into new File(buildDir, 'resources_server')
+	exclude 'assets/minecraft/font'
+	exclude 'assets/minecraft/shaders'
+	exclude 'assets/minecraft/texts'
+	exclude 'assets/minecraft/textures'
+	exclude 'assets/fml/textures'
+}
+
+task processClientResources(type: ProcessResources) {
+	from sourceSets.main.resources.srcDirs
+	into new File(buildDir, 'resources_client')
+	exclude 'org/ultramine/defaults'
+}
+
+task jar_server(type: Jar) {
+	dependsOn(tasks.sidesplit, tasks.processServerResources)
+	from fileTree(tasks.sidesplit.getServerClasses()), tasks.processServerResources
+	classifier = 'server'
+	manifest {
+		attributes(
+			'Main-Class': 'cpw.mods.fml.relauncher.ServerLaunchWrapper',
+			'TweakClass': 'cpw.mods.fml.common.launcher.FMLTweaker',
+			'Class-Path': configurations.packageServer.collect { 'libraries/' + it.getName() }.join(' ')
+		)
+	}
+}
+
+task jar_client(type: Jar) {
+	dependsOn(tasks.sidesplit, tasks.processClientResources)
+	from fileTree(tasks.sidesplit.getClientClasses()), tasks.processClientResources
+	classifier = 'client'
+}
+
+task jar_universal(type: Jar) {
+	dependsOn(tasks.reobf, tasks.processResources)
+	from tasks.reobf.getOutputDir(), tasks.processResources
+	classifier = 'universal'
+}
+
+jar {
+	classifier = 'dev'
+}
+
+task jar_source(type: Jar) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+task storeLastRevision {
+	inputs.property("version", version)
+	outputs.dir file("$buildDir/versions")
+	doLast {
+		doStoreLastRevision()
+	}
+}
+tasks.build.dependsOn tasks.storeLastRevision
+
+task changelog {
+	inputs.property("prev_commit", previousCommit)
+	inputs.property("commit", commit)
+	ext.changelogFile = file("$buildDir/libs/$project.name-$version-changelog.txt")
+	outputs.file changelogFile
+	doLast {
+		doGenerateChangelog(changelogFile);
+	}
+}
+
+artifacts {
+	if(produce_universal_jar == 'true')	archives jar_universal
+	if(produce_server_jar == 'true')	archives jar_server
+	if(produce_client_jar == 'true')	archives jar_client
+}
+
+tasks.publish.dependsOn changelog
+//publishing {
+//	publications {
+//		if(publish_jars.contains('dev'))
+//			mavenDevJar(MavenPublication) {
+//				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar), configurations.packageAll.getAllDependencies())
+//				artifacts.matching({it.classifier == "dev"}).all({it.classifier = null})
+//				artifact tasks.jar_source
+//				artifact tasks.changelog.getProperty('changelogFile'), {classifier = 'changelog'}
+//			}
+//		if(publish_jars.contains('universal'))
+//			mavenUnivarsalJar(MavenPublication) {
+//				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_universal), configurations.packageAll.getAllDependencies())
+//				artifacts.matching({it.classifier == "universal"}).all({it.classifier = null})
+//				artifactId = project.name + '-universal'
+//			}
+//		if(publish_jars.contains('server'))
+//			mavenServerJar(MavenPublication) {
+//				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_server), configurations.packageServer.getAllDependencies())
+//				artifacts.matching({it.classifier == "server"}).all({it.classifier = null})
+//				artifactId = project.name + '-server'
+//			}
+//		if(publish_jars.contains('client'))
+//			mavenClientJar(MavenPublication) {
+//				from new JavaLibrary(new ArchivePublishArtifact(tasks.jar_client), configurations.packageClient.getAllDependencies())
+//				artifacts.matching({it.classifier == "client"}).all({it.classifier = null})
+//				artifactId = project.name + '-client'
+//			}
+//	}
+//	repositories {
+//		if(project.hasProperty('publish_url') && !publish_url.isEmpty())
+//			maven {
+//				url publish_url
+//			}
+//	}
+//}
+
+task dumpLibs(type: Copy) {
+	into "$buildDir/libs/libraries"
+	from configurations.runtime
+}
+
+String getGitDesc() {
+	def stdout = new ByteArrayOutputStream()
+	exec {
+		commandLine 'git', 'describe', '--tags', '--long'
+		standardOutput = stdout
+		errorOutput = stdout
+	}.rethrowFailure().assertNormalExitValue()
+	return stdout.toString().trim()
+}
+
+String computeVersion() {
+	if(project.hasProperty('override_version'))
+		return override_version
+
+	String mmversion; // major.minor
+	try {
+		String[] parts = getGitDesc().split('-')
+		if(parts.length != 3) throw new GradleException('no git tags found')
+		if(!parts[0].startsWith('v')) throw new GradleException('last git tag is not a version')
+		mmversion = parts[0].substring(1) //removing 'v'
+		commit = parts[2].substring(1) //removing 'g'
+	} catch (Exception e) {
+		if(release_type != 'indev') throw e
+		return 'indev'
+	}
+
+	if(release_type != 'stable') {
+		int ind = mmversion.lastIndexOf('.')
+		mmversion = mmversion.substring(0, ind+1) + ((mmversion.substring(ind+1) as int) + 1) + '.0-' + release_type
+	}
+
+	if(project.hasProperty('override_revision')) {
+		revision = override_revision as int
+	} else if(release_type != 'indev' || project.hasProperty('increment_revision')) {
+		File verfile = versionFile = file("$buildDir/versions/$mmversion")
+		String filetext;
+		if(verfile.exists() && !(filetext = verfile.getText().trim()).isEmpty()) {
+			String[] fileparts = filetext.split(':')
+			if(fileparts.length != 2) throw new GradleException('Version file is corrupted: ' + verfile.getAbsolutePath())
+			revision = fileparts[1] as int;
+			previousCommit = fileparts[0];
+			if(!commit.equals(fileparts[0]) || project.hasProperty('increment_revision')) {
+				revision++;
+			}
+		}
+	}
+
+	return (revision > 0 || release_type == 'stable') ? (mmversion+'.'+revision) : mmversion;
+}
+
+void doStoreLastRevision() {
+	if(versionFile != null) {
+		versionFile.getParentFile().mkdirs()
+		versionFile.write(commit+':'+revision)
+		file("$buildDir/versions/versions").append(commit+':'+version+'\n');
+	}
+}
+
+void doGenerateChangelog(File file) {
+	BufferedWriter writer = file.newWriter();
+	writer.writeLine("Changelog for $name-$version");
+	if(previousCommit == null) {
+		writer.writeLine('\tempty');
+	} else {
+		def stdout = new ByteArrayOutputStream()
+		exec {
+			commandLine 'git', 'log', '--abbrev-commit', '--pretty=short', previousCommit + '..HEAD'
+			standardOutput = stdout
+			errorOutput = stdout
+		}.rethrowFailure().assertNormalExitValue()
+		for(String s : stdout.toString().trim().split('\n')) {
+			s = s.trim();
+			if(s.isEmpty() || s.startsWith('Author'))
+				continue;
+			if(s.startsWith('commit'))
+				writer.writeLine('\t' + s.substring(7) + ':');
+			else
+				writer.writeLine('\t\t' + s);
+		}
+	}
+	writer.close();
+}

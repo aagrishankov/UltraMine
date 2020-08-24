@@ -1,0 +1,214 @@
+#Server core
+ultramine.teleporter.fail.cooldownd=Вы сможете телепортироваться через %s секунд
+ultramine.teleporter.fail.dim=Не удалось телепортироваться: мир не существует или заблокирован
+ultramine.teleporter.fail.riding=Нельзя телепортироваться во время езды
+ultramine.teleporter.delay=Вы будете телепортированы через %s секунд
+ultramine.teleporter.canceled=Телепортация отменена
+
+ultramine.autobroadcast.debugmsg=Сервер нагружен на %s (В пике - %s), Тиков в секунду: %s/20, Игроков: %s
+ultramine.autobackup.start=Выполняется автоматический бэкап мира
+
+ultramine.tools.itemblocker.useitem=Использование данного предмета запрещено сервером
+ultramine.tools.itemblocker.useblock=Использование данного блока запрещено сервером
+ultramine.tools.itemblocker.rmitem=Данный предмет запрещен сервером
+
+ultramine.notify.loggedhidden=Присоединился к игре невидимым
+ultramine.hidden.chat=Вы не можете писать в чат в невидимости
+
+ultramine.time.day.1=день
+ultramine.time.day.2=дня
+ultramine.time.day.3=дней
+ultramine.time.hour.1=час
+ultramine.time.hour.2=часа
+ultramine.time.hour.3=часов
+ultramine.time.min.1=минута
+ultramine.time.min.1.gen=минуту
+ultramine.time.min.2=минуты
+ultramine.time.min.3=минут
+ultramine.time.sec.1=секунда
+ultramine.time.sec.1.gen=секунду
+ultramine.time.sec.2=секунды
+ultramine.time.sec.3=секунд
+
+ultramine.restart.after=Рестарт сервера через %s
+ultramine.restart.now1=Рестарт сервера!
+ultramine.restart.now2=Вы будете автоматически отключены от сервера
+ultramine.restart.kick1=Сервер был перезапущен
+ultramine.restart.kick2=Вы сможете войти через несколько минут
+
+#Command generic
+command.generic.world.invalid=Указанный мир не существует или неинициализирован '%s'
+command.generic.itemstack.data=Не удалось разобрать предмет: %s
+command.generic.itemstack.size=Не удалось разобрать количество предметов: %s
+
+#Economy generic
+ultramine.economy.fail.currency_not_exists=Указанная валюта не существует: %s
+ultramine.economy.fail.currency_not_supported=Указанная валюта (%2$s) не поддерживается аккаунтом: %1$s
+ultramine.economy.fail.account_type_not_supported=Типа указанного счета не поддерживается валютой: %1$s
+ultramine.economy.fail.negative_amount=Сумма должна быть больше нуля (указано %s)
+ultramine.economy.fail.insufficient_funds=На вашем счету недостаточно средств для совершения данной операции
+
+#Vanilla replacements
+command.tp.usage=/tp [кого] <к кому> ИЛИ /tp [кого] [мир] <x> <y> <z>
+command.tp.description=Телепортация указанного игрока (или вас) к другому игроку или по координатам
+command.tp.success.player=Телепортирован '%s' к '%s'
+command.tp.success.coordinate=Телепортирован '%s' к [%s](%s, %s, %s)
+
+command.tphere.usage=/tphere [кого]
+command.tphere.description=Телепортация указанного игрока к вам
+
+command.difficulty.usage=/difficulty [мир] <peaceful easy normal hard>
+command.difficulty.description=Изменение сложности игры
+command.difficulty.success=Сложность мира %s изменена с %s на %s
+
+command.msg.usage=/msg <игрок> <сообщение ...>
+command.msg.description=Отправка приватного сообщения игроку
+command.msg.display.outgoing=[я -> %s] %s
+command.msg.display.incoming=[%s -> я] %s
+
+command.reply.usage=/reply <сообщение ...>
+command.reply.description=Отправка приватного сообщения последнему игроку, которому вы отправляли сообщение командой /msg
+command.reply.fail=Сначала используйте команду /msg
+
+command.weather.usage=/weather [мир] <clear rain thunder> [следующее изменение (секунд)]
+command.weather.description=Устанавливает погоду в текущем или указанном мире
+
+command.time.usage=/time [мир] [add|set] <day|night|время>
+command.time.description=Устанавливает время суток в текущем или указанном мире
+
+command.say.server=Сервер
+
+#Basic commands
+
+command.fastwarp.usage=/fastwarp <app|remove> <название>
+command.fastwarp.description=Добавляет фастварп
+command.fastwarp.fail.spawn=Нельзя изменить фастварп спавна
+command.fastwarp.fail.nowarp=Варп с указаным именем не определен; Используйте /setwarp
+command.fastwarp.fail.nofastwarp=Фастварп с указаным именем не определен
+command.fastwarp.fail.already=Фастварп с указаным именем уже установлен
+command.fastwarp.success.add=Фастварп добавлен
+command.fastwarp.success.remove=Фастварп удален
+command.fastwarp.use.description=Телепортация к этой точке
+
+#Technical commands
+command.id.usage=/id <id>
+command.id.description=Показывает информацию об указанном id
+
+command.uptime.usage=/uptime
+command.uptime.description=Показыват информацию о загруженности сервера
+command.uptime.msg.up=Работает: %s
+command.uptime.msg.load=Загруженность: %s (В пике: %s)
+command.uptime.msg.tps=Тиков в секунду: %s/20 (%s)
+
+command.debuginfo.usage=/debuginfo [мир/игрок]
+command.debuginfo.description=Некоторая отладочная информация
+
+command.memstat.usage=/memstat
+command.memstat.description=Displays max, current allocated and free memory
+
+command.multiworld.usage=/multiworld <load|unload|hold|destroy|delete|wipe|unregister|drop|goto> <мир> ИЛИ /multiworld list ИЛИ /multiworld import <файл> [путь]
+command.multiworld.description=Все команды MultiWorld
+command.multiworld.list.head=Список измерений:
+command.multiworld.alreadyloaded=Измерение уже загружено
+command.multiworld.notregistered=Измерение на зарегистрировано (не существует)
+command.multiworld.notloaded=Измерение не загружено
+command.multiworld.load.start=Начата загрузка измерения
+command.multiworld.load.success=Измерение загружено
+command.multiworld.load.fail=Не удалось загрузить измерение
+command.multiworld.unload.start=Начата выгрузка измерения
+command.multiworld.unload.success=Измерение выгружено
+command.multiworld.unload.fail=Не удалось выгрузить измерение
+command.multiworld.hold.start=Начата блокировка измерения
+command.multiworld.hold.success=Измерение выгружено и заблокировано
+command.multiworld.hold.fail=Не удалось блокировать измерение
+command.multiworld.destroy.start=Начата выгрузка измерения без сохранения
+command.multiworld.destroy.success=Измерение выгружено
+command.multiworld.destroy.fail=Не удалось выгрузить измерение
+command.multiworld.delete.start=Начато удаление измерение
+command.multiworld.delete.success=Измерение удалено
+command.multiworld.delete.fail=Не удалось удалить измерение
+command.multiworld.wipe.start=Начат вайп измерение
+command.multiworld.wipe.success=Измерение вайпнуто
+command.multiworld.wipe.fail=Не удалось вайпнуть измерение
+command.multiworld.unregister.success=Измерение разрегистрировано
+command.multiworld.drop.success=Измерение удалено из конфигурации
+
+command.countentity.usage=/countentity <радиус>
+command.countentity.description=Подсчитывает количество Entity в радиусе
+command.countentity.result1=Найдено %s Entity. Мобов: %s, Предметов: %s
+command.countentity.result2=Монстров: %s, Животных: %s, Водных: %s, Летающих: %s
+
+command.clearentity.usage=/clearentity [all|mobs|items] <радиус>
+command.clearentity.description=Удаляет Entity по радиусу
+command.clearentity.success=Очищено %s Entity. Мобов: %s, Предметов: %s
+
+command.startlags.usage=/startlags <процент> ИЛИ /startlags stop
+command.startlags.description=Симулирует определенный процент нагрузки на сервер
+command.startlags.start=Start lagging on %s%%
+command.startlags.stop=Stop lagging
+
+command.restart.usage=/restart <задержка> ИЛИ /restart abort
+command.restart.description=Отложенный перезапуск сервера
+command.restart.abort.success=Растарт отменен
+command.restart.abort.fail=Рестарт еще не запущен
+command.restart.success=Рестарт запущен
+
+command.javagc.usage=/javaGC
+command.javagc.description=Инициировать сборку мусора
+command.javagc.success=Сборка мусора инициирована
+
+command.chunkgc.usage=/chunkgc
+command.chunkgc.description=Выгружает все неиспользуемые чанки
+command.chunkgc.success=Выгрузка чанков инициирована
+
+command.genworld.usage=/genworld ИЛИ /genworld <радиус> ИЛИ /genworld <мир> <x> <z> <радиус> ИЛИ /genworld [мир] stop
+command.genworld.description=Генерирует мир по радиусу или в пределах мирового барьера
+command.genworld.already=Генерация указанного мира уже запущена. Сначала введите "/genworld stop"
+command.genworld.noborder=Мир не содержит барьера; добавьте барьер или используйте генерацию по радиусу
+command.genworld.start=Генерация мира запущена
+command.genworld.stop=Генерация мира остановлена (сгенерировано %s/%s чанков)
+command.genworld.stop.fail.notrun=Генерация указанного мира еще не была запущена
+command.genworld.complete=Генерация мира завершена (сгенерировано %s/%s чанков)
+command.genworld.process=Генерация мира: сгенерировано %s/%s чанков
+
+command.chunkdebug.usage=/chunkdebug <start|stop> ИЛИ /chunkdebug <TOP> [average|peak] [количество]
+command.chunkdebug.description=Запускает почанковое профилирование или выводит результаты
+command.chunkdebug.start=Почанковое профилирование запущено
+command.chunkdebug.stop=Почанковое профилирование остановлено
+command.chunkdebug.notstart=Почанковое профилирование еще не запущено. Подождите, пока будет собрана статистика
+command.chunkdebug.top.head=Топ чанков:
+
+command.backup.usage=/backup make [миры...] ИЛИ /backup list ИЛИ /backup apply <номер/путь> [flags: -noplayers -temp -restart -worlds ...]
+command.backup.description=Создает или применяет бэкап всех или указанных миров
+command.backup.make.started=Запущен бэкап для миров: %s
+command.backup.make.fail=Не найдено ни одного мира для бэкапа
+command.backup.list.head=Список бэкапов
+command.backup.apply.started=Запущено применение бэкапа миров: %s
+command.backup.apply.fail.none=Бэкап с номером %s не найден
+command.backup.apply.fail.nofile=Файл бэкапа не найден для пути: %s
+command.backup.apply.fail.zip.read=Не удается прочитать zip архив: %s
+command.backup.apply.fail.nothing=Не найдено ни одного мира для применения бэкапа
+command.backup.apply.fail.rmdir=Не удалось удалить директорию мира: %s
+command.backup.apply.fail.zip.unpack=Не удалось распаковать zip файл. это очень ОЧЕНЬ полохо. Может привести к полному разрушению миров. Пожалуйста, применить другой бэкап.
+command.backup.apply.success.temp=Бэкап успешно применен! Созданы временные миры:
+command.backup.apply.success=Бэкап успешно применен!
+
+command.recipecache.usage=/recipecache clear
+command.recipecache.description=Очищает кэш рецептов крафта
+command.recipecache.clear.success=Кэш рецептов крафта успешно очищен
+
+command.reloadcfg.usage=/reloadcfg
+command.reloadcfg.description=Перезагружает конфигурацию UltraMine сервера (из директории /settings)
+command.reloadcfg.success=Серверная конфигурация успешно перезагружена
+
+command.entitylist.usage=/entitylist [мир]
+command.entitylist.description=Показывает список всех загруженных Entity в указанном мире, либо во всех мирах
+
+command.killentity.usage=/killentity <id>
+command.killentity.description=Убивает Entity с указанным ID
+
+ultramine.ability.chat.muted=Возможность писать в чат была заблокирована на %s
+ultramine.ability.chat.muted.forever=Возможность писать в чат была заблокирована навсегда
+
+ultramine.ability.command.muted=Возможность выполнять команды была заблокирована на %s
+ultramine.ability.command.muted.forever=Возможность выполнять команды была заблокирована навсегда

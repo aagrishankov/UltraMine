@@ -1,0 +1,140 @@
+apply plugin: 'java' 
+apply plugin: 'eclipse'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+repositories
+{
+    maven
+    {
+        name 'forge'
+        url 'http://files.minecraftforge.net/maven'
+    }
+    mavenCentral()
+    maven
+    {
+        name 'sonatypeSnapshot'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    maven
+    {
+        name 'minecraft'
+        url 'https://libraries.minecraft.net/'
+    }
+}
+
+dependencies
+{
+    compile 'net.minecraft:launchwrapper:1.12'
+    compile 'com.google.code.findbugs:jsr305:1.3.9'
+    compile 'org.ow2.asm:asm-debug-all:5.0.3'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.3.3'
+    compile 'com.typesafe:config:1.2.1'
+    compile 'org.scala-lang:scala-actors-migration_2.11:1.1.0'
+    compile 'org.scala-lang:scala-compiler:2.11.1'
+    compile 'org.scala-lang.plugins:scala-continuations-library_2.11:1.0.2'
+    compile 'org.scala-lang.plugins:scala-continuations-plugin_2.11.1:1.0.2'
+    compile 'org.scala-lang:scala-library:2.11.1'
+    compile 'org.scala-lang:scala-parser-combinators_2.11:1.0.1'
+    compile 'org.scala-lang:scala-reflect:2.11.1'
+    compile 'org.scala-lang:scala-swing_2.11:1.0.1'
+    compile 'org.scala-lang:scala-xml_2.11:1.0.2'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'lzma:lzma:0.0.1'
+    compile 'com.mojang:realms:1.3.5'
+    compile 'org.apache.commons:commons-compress:1.8.1'
+    compile 'org.apache.httpcomponents:httpclient:4.3.3'
+    compile 'commons-logging:commons-logging:1.1.3'
+    compile 'org.apache.httpcomponents:httpcore:4.3.2'
+    compile 'java3d:vecmath:1.3.1'
+    compile 'net.sf.trove4j:trove4j:3.0.3'
+    compile 'com.ibm.icu:icu4j-core-mojang:51.2'
+    compile 'com.paulscode:codecjorbis:20101023'
+    compile 'com.paulscode:codecwav:20101023'
+    compile 'com.paulscode:libraryjavasound:20101123'
+    compile 'com.paulscode:librarylwjglopenal:20100824'
+    compile 'com.paulscode:soundsystem:20120107'
+    compile 'io.netty:netty-all:4.0.10.Final'
+    compile 'com.google.guava:guava:17.0'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-codec:commons-codec:1.9'
+    compile 'net.java.jinput:jinput:2.0.5'
+    compile 'net.java.jutils:jutils:1.0.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.mojang:authlib:1.5.16'
+    compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+    compile 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+    compile 'tv.twitch:twitch:5.16'
+
+    testCompile 'junit:junit:4.5'
+}
+
+sourceSets
+{
+    main
+    {
+        java
+        {
+            srcDir 'src/main/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/main/java/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/eclipse/Clean/src/main/start/'
+        }
+        resources
+        {
+            srcDir 'src/main/resources/'
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/main/resources/'
+        }
+    }
+    test
+    {
+        java
+        {
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/test/java/'
+        }
+        resources
+        {
+            srcDir '/var/lib/jenkins/jobs/CleanForge_1.7.10/workspace/src/test/resources/'
+        }
+    }
+}
+
+jar { exclude 'GradleStart*', 'net/minecraftforge/gradle/**' }
+
+def links = []
+def dupes = []
+eclipse.project.file.withXml { provider ->
+    def node = provider.asNode()
+    links = []
+    dupes = []
+    node.linkedResources.link.each { child ->
+        def path = child.location.text()
+        if (path in dupes) {
+            child.replaceNode {}
+        } else {
+            dupes.add(path)
+            def newName = path.split('/')[-2..-1].join('/')
+            links += newName
+            child.replaceNode {
+                link{
+                    name(newName)
+                    type('2')
+                    location(path)
+                }
+            }
+        }
+    }
+}
+
+eclipse.classpath.file.withXml {
+    def node = it.asNode()
+    node.classpathentry.each { child -> 
+        if (child.@kind == 'src' && !child.@path.contains('/')) child.replaceNode {}
+        if (child.@path in links) links.remove(child.@path)
+    }
+    links.each { link -> node.appendNode('classpathentry', [kind:'src', path:link]) }
+}
+tasks.eclipseClasspath.dependsOn 'eclipseProject' //Make them run in correct order

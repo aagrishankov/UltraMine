@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="org.ultramine.server.bootstrap.log4j">
+    <Appenders>
+        <Console name="SysOut" target="SYSTEM_OUT">
+            <UMConsoleLayout />
+        </Console>
+        <RollingRandomAccessFile name="FileRaw" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%logger/%X{mod}]: %msg%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Rewrite name="File">
+            <AppenderRef ref="FileRaw" />
+            <UMStripColorsRewritePolicy />
+        </Rewrite>
+    </Appenders>
+    <Loggers>
+        <Root level="all" includeLocation="false">
+            <filters>
+                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
+            </filters>
+            <AppenderRef ref="SysOut" level="INFO" />
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
