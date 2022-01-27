@@ -260,7 +260,7 @@ public class PlayerManager
 
 	public class PlayerInstance
 	{
-		private final List playersWatchingChunk = new ArrayList();
+		public final List playersWatchingChunk = new ArrayList();
 		private final ChunkCoordIntPair chunkLocation;
 		private short[] locationOfBlockChange = new short[64];
 		private int numberOfTilesToUpdate;
