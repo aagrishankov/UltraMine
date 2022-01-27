@@ -44,6 +44,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import org.ultramine.server.ConfigurationHandler;
 import org.ultramine.server.event.WorldUpdateObjectType;
 
 public class NetworkManager extends SimpleChannelInboundHandler
@@ -229,14 +230,16 @@ public class NetworkManager extends SimpleChannelInboundHandler
 					profiler.startSection(packet.getClass().getSimpleName());
 				long startT = System.nanoTime();
 				packet.processPacket(this.netHandler);
-				long elapsed = System.nanoTime() - startT;
-				if(elapsed > 20000000)
-				{
-					logger.warn("Possible lag source on processiong packet {} from {} {}ms", packet.getClass().getSimpleName(), player, (elapsed/1000000));
-					if(packet instanceof C0EPacketClickWindow && player != null)
-						logger.warn("    Container: " + player.openContainer.getClass().getName());
-					else if(packet instanceof FMLProxyPacket)
-						logger.warn("    Channel: " + ((FMLProxyPacket)packet).channel());
+				
+				if (ConfigurationHandler.getServerConfig().settings.other.spamLagConsole) {
+					long elapsed = System.nanoTime() - startT;
+					if (elapsed > 20000000) {
+						logger.warn("Possible lag source on processiong packet {} from {} {}ms", packet.getClass().getSimpleName(), player, (elapsed / 1000000));
+						if (packet instanceof C0EPacketClickWindow && player != null)
+							logger.warn("    Container: " + player.openContainer.getClass().getName());
+						else if (packet instanceof FMLProxyPacket)
+							logger.warn("    Channel: " + ((FMLProxyPacket) packet).channel());
+					}
 				}
 				if(profiler != null)
 					profiler.endSection();

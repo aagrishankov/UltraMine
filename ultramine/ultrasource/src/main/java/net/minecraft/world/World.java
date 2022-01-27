@@ -1974,9 +1974,11 @@ public abstract class World implements IBlockAccess
 						chunkProfiler.startChunk(entity);
 						long startT = System.nanoTime();
 						this.updateEntity(entity);
-						long elapsed = System.nanoTime() - startT;
-						if(elapsed > 20000000)
-							FMLLog.warning("Possible lag source Entity %s %sms", entity, (elapsed/1000000));
+						if (ConfigurationHandler.getServerConfig().settings.other.spamLagConsole) {
+							long elapsed = System.nanoTime() - startT;
+							if (elapsed > 20000000)
+								FMLLog.warning("Possible lag source Entity %s %sms", entity, (elapsed / 1000000));
+						}
 					}
 				}
 				catch (Throwable throwable1)
@@ -2034,10 +2036,13 @@ public abstract class World implements IBlockAccess
 			{
 				long startT = System.nanoTime();
 				((TileEntity)tile).onChunkUnload();
-				long elapsed = System.nanoTime() - startT;
-				if(elapsed > 20000000)
-					FMLLog.warning("Possible lag source on unload TileEntity %s [%s](%s, %s, %s) %sms", tile.getClass(), provider.dimensionId,
-							((TileEntity)tile).xCoord, ((TileEntity)tile).yCoord, ((TileEntity)tile).zCoord, (elapsed/1000000));
+				if (ConfigurationHandler.getServerConfig().settings.other.spamLagConsole) {
+					long elapsed = System.nanoTime() - startT;
+					if (elapsed > 20000000)
+						FMLLog.warning("Possible lag source on unload TileEntity %s [%s](%s, %s, %s) %sms", tile.getClass(), provider.dimensionId,
+								((TileEntity) tile).xCoord, ((TileEntity) tile).yCoord, ((TileEntity) tile).zCoord, (elapsed / 1000000)
+						);
+				}
 			}
 			this.loadedTileEntityList.removeAll(this.field_147483_b);
 			this.field_147483_b.clear();
@@ -2060,10 +2065,13 @@ public abstract class World implements IBlockAccess
 				{
 					long startT = System.nanoTime();
 					tileentity.updateEntity();
-					long elapsed = System.nanoTime() - startT;
-					if(elapsed > 20000000)
-						FMLLog.warning("Possible lag source TileEntity %s [%s](%s, %s, %s) %sms", tileentity.getClass(), provider.dimensionId,
-								tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, (elapsed/1000000));
+					if (ConfigurationHandler.getServerConfig().settings.other.spamLagConsole) {
+						long elapsed = System.nanoTime() - startT;
+						if (elapsed > 20000000)
+							FMLLog.warning("Possible lag source TileEntity %s [%s](%s, %s, %s) %sms", tileentity.getClass(), provider.dimensionId,
+									tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, (elapsed / 1000000)
+							);
+					}
 				}
 				catch (Throwable throwable)
 				{
